@@ -1,2 +1,3 @@
-# day-checker
-App that helps you to track your day goals, to loose weight and track your exercises with meds
+# Day checker
+App that helps you to track your day goals, to loose weight and track your exercises with meds.
+Curruntly under development.
