@@ -4,10 +4,19 @@ import (
 	"fmt"
 
 	"github.com/skljor/day-checker/models"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func main() {
 	var testUser models.User
+
+	db, err := gorm.Open(sqlite.Open("user.db"), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	db.AutoMigrate(&models.User{}, &models.Task{}, &models.WeightEntry{})
 
 	for {
 		fmt.Print("What is your height(m) and weight(kg): ")
