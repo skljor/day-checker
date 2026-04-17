@@ -36,13 +36,13 @@ func (u User) BMI() (float64, string) {
 	var category string
 
 	switch {
-	case bmi < 0:
+	case 0 <= bmi && bmi < 18.5:
 		category = "underweight"
-	case 18.5 <= bmi:
+	case 18.5 <= bmi && bmi < 25:
 		category = "normal"
-	case 25 <= bmi:
+	case 25 <= bmi && bmi < 30:
 		category = "overweight"
-	case 30 <= bmi:
+	case 30 <= bmi && bmi < 35:
 		category = "obese"
 	case bmi >= 35:
 		category = "extremely obese"
