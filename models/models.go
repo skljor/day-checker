@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -15,8 +14,8 @@ type User struct {
 
 type WeightEntry struct {
 	gorm.Model
-	Date          time.Time `json:"date"`
-	CurrentWeight float64   `json:"current_weight"`
+	Weight float64 `json:"weight"`
+	UserID uint    `json:"user_id"`
 }
 
 type Task struct {
@@ -31,8 +30,8 @@ func (u User) Print() {
 	fmt.Println("Weight: ", u.Weight)
 }
 
-func (u User) BMI() (float64, string) {
-	bmi := u.Weight / (u.Height * u.Height)
+func (u User) BMI(currentWeight float64) (float64, string) {
+	bmi := currentWeight / (u.Height * u.Height)
 	var category string
 
 	switch {
