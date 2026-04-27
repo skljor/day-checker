@@ -19,6 +19,6 @@ func GetUserTasks(db *gorm.DB, userID uint) ([]Task, error) {
 	return tasks, err
 }
 
-func ToogleTaskStatus(db *gorm.DB, taskID uint, isDone bool) error {
+func ToggleTaskStatus(db *gorm.DB, taskID uint, isDone bool) error {
 	return db.Model(&Task{}).Where("id = ?", taskID).Update("done", isDone).Error
 }
