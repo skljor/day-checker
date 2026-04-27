@@ -23,6 +23,7 @@ type Task struct {
 	Title    string `json:"title"`
 	Category string `json:"category"`
 	Done     bool   `json:"done"`
+	UserID   uint   `json:"user_id"`
 }
 
 func (u User) Print() {
