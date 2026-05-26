@@ -95,6 +95,53 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "Task successfully deleted"})
 	})
 
+	r.POST("/api/weight", func(c *gin.Context) {
+		var input struct {
+			Weight float64 `json:"weight"`
+		}
+
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Wrong data type"})
+			return
+		}
+
+		if err := models.AddWeightEntry(db, user.ID, input.Weight); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Impossible to save weight"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Weight successfully added"})
+	})
+
+	r.GET("/api/weight", func(c *gin.Context) {
+		history, err := models.GetWeightHistory(db, user.ID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Can't load weight history"})
+			return
+		}
+
+		c.JSON(http.StatusOK, history)
+	})
+
+	r.GET("/api/user", func(c *gin.Context) {
+		var currentUser models.User
+
+		if err := db.First(&currentUser, user.ID).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Can't find profile"})
+			return
+		}
+
+		bmi, status := currentUser.BMI(currentUser.Weight)
+
+		c.JSON(http.StatusOK, gin.H{
+			"id":     currentUser.ID,
+			"height": currentUser.Height,
+			"weight": currentUser.Weight,
+			"bmi":    fmt.Sprintf("%.2f", bmi),
+			"status": status,
+		})
+	})
+
 	fmt.Println("Server is started! Open http://localhost:8080/api/tasks")
 	r.Run(":8080")
 }
